@@ -36,7 +36,7 @@ def get_node_depth(model, node):
     Raises:
         KeyError: if the node is not contained in the model.
     """
-    for (depth, nodes_at_depth) in model.nodes_by_depth.items():
+    for (depth, nodes_at_depth) in model._nodes_by_depth.items():
         if node in nodes_at_depth:
             return depth
     raise KeyError('The node is not contained in the model.')
@@ -71,7 +71,7 @@ def check_nodes_in_model(model, nodes):
 
 def get_model_nodes(model):
     """Return all nodes in the model"""
-    return [node for v in model.nodes_by_depth.values() for node in v]
+    return [node for v in model._nodes_by_depth.values() for node in v]
 
 
 def get_shallower_nodes(node):
