@@ -1,4 +1,4 @@
-"""Utilities used across other modules."""
+ƒ"""Utilities used across other modules."""
 import numpy as np
 from keras.layers import Layer
 from keras.activations import linear
@@ -46,14 +46,14 @@ def check_for_layer_reuse(model, layers=None):
     """Returns True if any layers are reused, False if not."""
     if layers is None:
         layers = model.layers
-    return any([len(l.inbound_nodes) > 1 for l in layers])
+    return any([len(l._inbound_nodes) > 1 for l in layers])
 
 
 def find_nodes_in_model(model, layer):
     """Find the indices of layer's inbound nodes which are in model"""
     model_nodes = get_model_nodes(model)
     node_indices = []
-    for i, node in enumerate(layer.inbound_nodes):
+    for i, node in enumerate(layer._inbound_nodes):
         if node in model_nodes:
             node_indices.append(i)
     return node_indices
@@ -79,18 +79,18 @@ def get_shallower_nodes(node):
     next_nodes = []
     for n in possible_nodes:
         for i, node_index in enumerate(n.node_indices):
-            if node == n.inbound_layers[i].inbound_nodes[node_index]:
+            if node == n.inbound_layers[i]._inbound_nodes[node_index]:
                 next_nodes.append(n)
     return next_nodes
 
 
 def get_inbound_nodes(node):
-    return [node.inbound_layers[i].inbound_nodes[node_index]
+    return [node.inbound_layers[i]._inbound_nodes[node_index]
             for i, node_index in enumerate(node.node_indices)]
 
 
 def get_node_index(node):
-    for i, n in enumerate(node.outbound_layer.inbound_nodes):
+    for i, n in enumerate(node.outbound_layer._inbound_nodes):
         if node == n:
             return i
 
@@ -104,7 +104,7 @@ def find_activation_layer(layer, node_index):
     """
     output_shape = layer.get_output_shape_at(node_index)
     maybe_layer = layer
-    node = maybe_layer.inbound_nodes[node_index]
+    node = maybe_layer._inbound_nodes[node_index]
     # Loop will be broken by an error if an output layer is encountered
     while True:
         # If maybe_layer has a nonlinear activation function return it and its index
