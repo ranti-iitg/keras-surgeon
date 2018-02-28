@@ -350,8 +350,8 @@ class Surgeon:
         if all(mask is None for mask in inbound_masks):
             new_layer = layer
             outbound_mask = None
+            print(node,"node if return")
             return new_layer, outbound_mask
-        print(node,"node")
         elif any(mask is None for mask in inbound_masks):
             inbound_masks = [np.ones(shape[1:], dtype=bool)
                              if inbound_masks[i] is None else inbound_masks[i]
