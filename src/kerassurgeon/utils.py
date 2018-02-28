@@ -1,4 +1,6 @@
 """Utilities used across other modules."""
+from __future__ import division
+from __future__ import absolute_import
 import numpy as np
 from keras.layers import Layer
 from keras.activations import linear
