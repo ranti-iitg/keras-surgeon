@@ -397,6 +397,9 @@ class Surgeon:
                                         axis=-1)
                 new_shape = list(weights[0].shape)
                 new_shape[-2] = -1  # Weights always have channels_last
+                print weights[0].shape,"weights[0]"
+                print delete_mask.shape,"deletemask"
+                print new_shape,"new_shape"
                 weights[0] = np.reshape(weights[0][delete_mask], new_shape)
                 # Instantiate new layer with new_weights
                 config = layer.get_config()
