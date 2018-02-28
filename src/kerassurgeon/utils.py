@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import numpy as np
 from keras.layers import Layer
 from keras.activations import linear
-
+from itertools import izip
 
 def clean_copy(model):
     """Returns a copy of the model without other model uses of its layers."""
@@ -137,7 +137,7 @@ def find_activation_layer(layer, node_index):
 
 def sort_x_by_y(x, y):
     """Sort the iterable x by the order of iterable y"""
-    x = [x for (_, x) in sorted(zip(y, x))]
+    x = [x for (_, x) in sorted(izip(y, x))]
     return x
 
 
