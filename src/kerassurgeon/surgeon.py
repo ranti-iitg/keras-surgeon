@@ -162,7 +162,7 @@ class Surgeon:
         output_nodes = [self.model.output_layers[i]._inbound_nodes[node_index]
                         for i, node_index in
                         enumerate(self.model.output_layers_node_indices)]
-        print(output_nodes)
+        print(output_nodes,"output nodes")
         new_outputs, _ = self._rebuild_graph(self.model.inputs, output_nodes)
         new_model = Model(self.model.inputs, new_outputs)
 
