@@ -1,4 +1,4 @@
-ƒ"""Utilities used across other modules."""
+"""Utilities used across other modules."""
 import numpy as np
 from keras.layers import Layer
 from keras.activations import linear
