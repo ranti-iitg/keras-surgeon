@@ -342,6 +342,8 @@ class Surgeon:
 
         # if delete_mask is None or all values are True, it does not affect
         # this layer or any layers above/downstream from it
+        print(node,"node")
+        print(inbound_masks,"inbound_masks")
         layer = node.outbound_layer
         if all(mask is None for mask in inbound_masks):
             new_layer = layer
