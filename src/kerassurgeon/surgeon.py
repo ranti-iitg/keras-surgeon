@@ -6,7 +6,7 @@ import numpy as np
 from keras.engine.topology import Node
 from keras.layers import BatchNormalization
 from keras.models import Model
-from itertools import izip
+#from itertools import izip
 from kerassurgeon import utils
 
 # Set up logging
@@ -237,7 +237,7 @@ class Surgeon:
                     [node.outbound_layer.name for node in inbound_nodes]))
                 # Recursively rebuild the model up to `node`s inbound nodes to
                 # obtain its inputs and input masks
-                inputs, input_masks = izip(
+                inputs, input_masks = zip(
                     *[_rebuild_rec(n) for n in inbound_nodes])
 
                 # Apply masks to the node's layer's  weights and call the layer
@@ -252,7 +252,7 @@ class Surgeon:
 
         # Call the recursive _rebuild_rec method to rebuild the submodel up to
         # each output layer
-        outputs, output_masks = izip(*[_rebuild_rec(n) for n in output_nodes])
+        outputs, output_masks = zip(*[_rebuild_rec(n) for n in output_nodes])
         return outputs, output_masks
 
     def _delete_layer(self, node, inputs, input_masks):
