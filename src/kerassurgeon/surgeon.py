@@ -50,7 +50,7 @@ class Surgeon:
                            'replace_layer',
                            'delete_channels')
 
-    def add_job(self, job, layer, *,
+    def add_job(self, job, layer, 
                 channels=None, new_layer=None, node_indices=None):
         """Adds a job for the Surgeon to perform on the model.
 

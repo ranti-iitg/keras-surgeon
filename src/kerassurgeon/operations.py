@@ -1,7 +1,7 @@
 from kerassurgeon.surgeon import Surgeon
 
 
-def delete_layer(model, layer, *, node_indices=None, copy=True):
+def delete_layer(model, layer, node_indices=None, copy=True):
     """Delete instances of a layer from a Keras model.
 
     Args:
@@ -21,7 +21,7 @@ def delete_layer(model, layer, *, node_indices=None, copy=True):
     return surgeon.operate()
 
 
-def insert_layer(model, layer, new_layer, *, node_indices=None, copy=True):
+def insert_layer(model, layer, new_layer, node_indices=None, copy=True):
     """Insert new_layer before instances of layer.
 
     If node_indices is not specified. The layer will be inserted before all
@@ -46,7 +46,7 @@ def insert_layer(model, layer, new_layer, *, node_indices=None, copy=True):
     return surgeon.operate()
 
 
-def replace_layer(model, layer, new_layer, *,  node_indices=None, copy=True):
+def replace_layer(model, layer, new_layer,   node_indices=None, copy=True):
     """Replace instances of layer with new_layer.
 
         If node_indices is not specified, all instances of layer will be
@@ -71,7 +71,7 @@ def replace_layer(model, layer, new_layer, *,  node_indices=None, copy=True):
     return surgeon.operate()
 
 
-def delete_channels(model, layer, channels, *, node_indices=None, copy=None):
+def delete_channels(model, layer, channels,  node_indices=None, copy=None):
     """Delete channels from instances of the specified layer.
 
     This method is designed to facilitate research into pruning networks to
