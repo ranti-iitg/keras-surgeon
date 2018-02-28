@@ -344,11 +344,14 @@ class Surgeon:
         # this layer or any layers above/downstream from it
         print(node,"node")
         print(inbound_masks,"inbound_masks")
+
         layer = node.outbound_layer
+        print(layer,"outbound layer")
         if all(mask is None for mask in inbound_masks):
             new_layer = layer
             outbound_mask = None
             return new_layer, outbound_mask
+        print(node,"node")
         elif any(mask is None for mask in inbound_masks):
             inbound_masks = [np.ones(shape[1:], dtype=bool)
                              if inbound_masks[i] is None else inbound_masks[i]
@@ -358,6 +361,7 @@ class Surgeon:
         input_shape = utils.single_element(node.input_shapes)
         data_format = getattr(layer, 'data_format', 'channels_last')
         inbound_masks = utils.single_element(inbound_masks)
+        print(node,"node")
         # otherwise, delete_mask.shape should be: layer.input_shape[1:]
         layer_class = layer.__class__.__name__
         if layer_class == 'InputLayer':
@@ -381,6 +385,7 @@ class Surgeon:
         elif layer_class in ('Conv1D', 'Conv2D', 'Conv3D'):
             if np.all(inbound_masks):
                 new_layer = layer
+                print("npall conv1d")
             else:
                 if data_format == 'channels_first':
                     inbound_masks = np.swapaxes(inbound_masks, 0, -1)
@@ -572,7 +577,7 @@ class Surgeon:
             # Warning/error needed for Reshape if channels axis is split
             raise ValueError('"{0}" layers are currently '
                              'unsupported.'.format(layer_class))
-
+        print(node,"node return")
         return new_layer, outbound_mask
 
     def _delete_channel_weights(self, layer, channel_indices):
