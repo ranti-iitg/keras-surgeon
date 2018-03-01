@@ -194,6 +194,7 @@ class Surgeon:
             tuple[submodel output tensors, output masks]
 
         """
+        print(output_nodes," rebuild graph output nodes")
         if not graph_input_masks:
             graph_input_masks = [None] * len(graph_inputs)
 
@@ -210,6 +211,7 @@ class Surgeon:
             """
             # TODO: What happens if nodes have multiple output tensors?
             # Does that ever happen?
+            print(node,"rebuild node val")
             layer = node.outbound_layer
             logging.debug('getting inputs for: {0}'.format(layer.name))
             node_output = utils.single_element(node.output_tensors)
