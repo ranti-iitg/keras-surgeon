@@ -1,12 +1,11 @@
-from __future__ import division
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 import logging
 
 import numpy as np
 from keras.engine.topology import Node
 from keras.layers import BatchNormalization
 from keras.models import Model
-#from itertools import izip
+from itertools import izip
 from kerassurgeon import utils
 
 # Set up logging
@@ -218,13 +217,13 @@ class Surgeon:
             # First check for conditions to bottom out the recursion
             # Check for replaced tensors before any other checks:
             # these are created by the surgery methods.
-            if node_output in self._replace_tensors.keys():
+            if node_output in self._replace_tensors.iterkeys():
                 logging.debug('bottomed out at replaced output: {0}'.format(
                     node_output))
                 output, output_mask = self._replace_tensors[node_output]
                 return output, output_mask
             # Next check if the current node has already been rebuilt.
-            elif node in self._finished_nodes.keys():
+            elif node in self._finished_nodes.iterkeys():
                 logging.debug('reached finished node: {0}'.format(node))
                 return self._finished_nodes[node]
             # Next check if one of the graph_inputs has been reached.
@@ -239,7 +238,7 @@ class Surgeon:
                     [node.outbound_layer.name for node in inbound_nodes]))
                 # Recursively rebuild the model up to `node`s inbound nodes to
                 # obtain its inputs and input masks
-                inputs, input_masks = zip(
+                inputs, input_masks = izip(
                     *[_rebuild_rec(n) for n in inbound_nodes])
 
                 # Apply masks to the node's layer's  weights and call the layer
@@ -254,7 +253,7 @@ class Surgeon:
 
         # Call the recursive _rebuild_rec method to rebuild the submodel up to
         # each output layer
-        outputs, output_masks = zip(*[_rebuild_rec(n) for n in output_nodes])
+        outputs, output_masks = izip(*[_rebuild_rec(n) for n in output_nodes])
         return outputs, output_masks
 
     def _delete_layer(self, node, inputs, input_masks):
@@ -298,7 +297,7 @@ class Surgeon:
         # If this layer has already been operated on, use the cached copy of
         # the new layer. Otherwise, apply the inbound delete mask and
         # delete channels to obtain the new layer
-        if old_layer in self._new_layers_map.keys():
+        if old_layer in self._new_layers_map.iterkeys():
             new_layer = self._new_layers_map[old_layer]
         else:
             temp_layer, new_mask = self._apply_delete_mask(node, input_masks)

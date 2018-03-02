@@ -1,6 +1,5 @@
 """Identify which channels to delete."""
-from __future__ import division
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 import numpy as np
 from keras import backend as k
 from keras.preprocessing.image import Iterator

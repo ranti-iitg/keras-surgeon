@@ -1,10 +1,9 @@
 """Utilities used across other modules."""
-from __future__ import division
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 import numpy as np
 from keras.layers import Layer
 from keras.activations import linear
-#from itertools import izip
+from itertools import izip
 
 def clean_copy(model):
     """Returns a copy of the model without other model uses of its layers."""
@@ -16,9 +15,9 @@ def clean_copy(model):
 
 def get_channels_attr(layer):
     layer_config = layer.get_config()
-    if 'units' in layer_config.keys():
+    if 'units' in layer_config.iterkeys():
         channels_attr = 'units'
-    elif 'filters' in layer_config.keys():
+    elif 'filters' in layer_config.iterkeys():
         channels_attr = 'filters'
     else:
         raise ValueError('This layer has not got any channels.')
@@ -38,7 +37,7 @@ def get_node_depth(model, node):
     Raises:
         KeyError: if the node is not contained in the model.
     """
-    for (depth, nodes_at_depth) in model._nodes_by_depth.items():
+    for (depth, nodes_at_depth) in model._nodes_by_depth.iteritems():
         if node in nodes_at_depth:
             return depth
     raise KeyError('The node is not contained in the model.')
@@ -73,7 +72,7 @@ def check_nodes_in_model(model, nodes):
 
 def get_model_nodes(model):
     """Return all nodes in the model"""
-    return [node for v in model._nodes_by_depth.values() for node in v]
+    return [node for v in model._nodes_by_depth.itervalues() for node in v]
 
 
 def get_shallower_nodes(node):
@@ -137,7 +136,7 @@ def find_activation_layer(layer, node_index):
 
 def sort_x_by_y(x, y):
     """Sort the iterable x by the order of iterable y"""
-    x = [x for (_, x) in sorted(zip(y, x))]
+    x = [x for (_, x) in sorted(izip(y, x))]
     return x
 
 
