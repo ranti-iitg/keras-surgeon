@@ -77,7 +77,7 @@ def get_model_nodes(model):
 
 
 def get_shallower_nodes(node):
-    possible_nodes = node.outbound_layer.outbound_nodes
+    possible_nodes = node.outbound_layer._outbound_nodes
     next_nodes = []
     for n in possible_nodes:
         for i, node_index in enumerate(n.node_indices):
