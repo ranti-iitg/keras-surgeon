@@ -223,7 +223,7 @@ class Surgeon:
             else:
                 inbound_nodes = utils.get_inbound_nodes(node)
                 logging.debug('inbound_layers: {0}'.format(
-                        ))
+                       [node.outbound_layer.name for node in inbound_nodes] ))
                 # Recursively rebuild the model up to `node`s inbound nodes to
                 # obtain its inputs and input masks
                 inputs, input_masks = izip(
