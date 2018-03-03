@@ -72,7 +72,7 @@ def replace_layer(model, layer, new_layer,   node_indices=None, copy=True):
     return surgeon.operate()
 
 
-def delete_channels(model, layer, channels,  node_indices=None, copy=None):
+def delete_channels(model, layer, channels, copy=None):
     """Delete channels from instances of the specified layer.
 
     This method is designed to facilitate research into pruning networks to
@@ -102,5 +102,5 @@ def delete_channels(model, layer, channels,  node_indices=None, copy=None):
         Channels are filters in conv layers and units in other layers.
     """
     surgeon = Surgeon(model, copy)
-    surgeon.add_job('delete_channels', layer, node_indices=node_indices, channels=channels)
+    surgeon.add_job('delete_channels', layer, channels=channels)
     return surgeon.operate()

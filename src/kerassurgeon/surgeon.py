@@ -52,7 +52,7 @@ class Surgeon:
                            'delete_channels')
 
     def add_job(self, job, layer, 
-                channels=None, new_layer=None, node_indices=None):
+                channels=None, new_layer=None):
         """Adds a job for the Surgeon to perform on the model.
 
         Job options are:
@@ -91,23 +91,11 @@ class Surgeon:
         layer_node_indices = utils.find_nodes_in_model(self.model, layer)
         # If no nodes are specified, all of the layer's inbound nodes which are
         # in model are selected.
-        if not node_indices:
-            node_indices = layer_node_indices
-        # Check for duplicate node indices
-        elif len(node_indices) != len(set(node_indices)):
-            raise ValueError('`node_indices` contains duplicate values.')
-        # Check that all of the selected nodes are in the layer
-        elif not set(node_indices).issubset(layer_node_indices):
-            raise ValueError('One or more nodes specified by `layer` and '
-                             '`node_indices` are not in `model`.')
+        node_indices = layer_node_indices
 
         # Select the modification function and any keyword arguments.
         kwargs = {}
         if job == 'delete_channels':
-            # If not all inbound_nodes are selected, the new layer is renamed
-            # to avoid duplicate layer names.
-            if set(node_indices) != set(layer_node_indices):
-                kwargs['layer_name'] = layer.name + '_' + job
             kwargs['channels'] = channels
             mod_func = self._delete_channels
 
@@ -217,13 +205,13 @@ class Surgeon:
             # First check for conditions to bottom out the recursion
             # Check for replaced tensors before any other checks:
             # these are created by the surgery methods.
-            if node_output in self._replace_tensors.iterkeys():
+            if node_output in self._replace_tensors:
                 logging.debug('bottomed out at replaced output: {0}'.format(
                     node_output))
                 output, output_mask = self._replace_tensors[node_output]
                 return output, output_mask
             # Next check if the current node has already been rebuilt.
-            elif node in self._finished_nodes.iterkeys():
+            elif node in self._finished_nodes:
                 logging.debug('reached finished node: {0}'.format(node))
                 return self._finished_nodes[node]
             # Next check if one of the graph_inputs has been reached.
@@ -235,7 +223,7 @@ class Surgeon:
             else:
                 inbound_nodes = utils.get_inbound_nodes(node)
                 logging.debug('inbound_layers: {0}'.format(
-                    [node.outbound_layer.name for node in inbound_nodes]))
+                        ))
                 # Recursively rebuild the model up to `node`s inbound nodes to
                 # obtain its inputs and input masks
                 inputs, input_masks = izip(
