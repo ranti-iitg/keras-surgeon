@@ -302,6 +302,7 @@ class Surgeon:
             # This call is needed to initialise input_shape and output_shape
             temp_layer(utils.single_element(inputs))
             new_layer = self._delete_channel_weights(temp_layer, channels)
+            self._new_layers_map[old_layer]=new_layer
         # Create a mask to propagate the deleted channels to downstream layers
         new_delete_mask = self._make_delete_mask(old_layer, channels)
         # Call the new layer on the rebuild submodel's inputs
