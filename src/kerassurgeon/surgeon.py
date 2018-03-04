@@ -203,6 +203,7 @@ class Surgeon:
             """
             # TODO: What happens if nodes have multiple output tensors?
             # Does that ever happen?
+            pdb.set_trace()
             print(node,"rebuild node val")
             layer = node.outbound_layer
             logging.debug('getting inputs for: {0}'.format(layer.name))
@@ -230,8 +231,6 @@ class Surgeon:
             # Otherwise recursively call this method on the inbound nodes.
             else:
                 inbound_nodes = utils.get_inbound_nodes(node)
-                logging.debug('inbound_layers: {0}'.format(
-                       [node.outbound_layer.name for node in inbound_nodes] ))
                 # Recursively rebuild the model up to `node`s inbound nodes to
                 # obtain its inputs and input masks
                 inputs, input_masks = zip(
