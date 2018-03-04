@@ -7,6 +7,7 @@ from keras.layers import BatchNormalization
 from keras.models import Model
 from itertools import izip
 from kerassurgeon import utils
+import pdb
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -143,7 +144,11 @@ class Surgeon:
 
             # Perform surgery at this node
             kwargs = self._kwargs_map[node]
-            self._mod_func_map[node](node, outputs, output_masks, **kwargs)
+            print(node,"node")
+            print(outputs,"outputs")
+            print(output_masks,"output_masks")
+            print(kwargs['channels'],"channels")
+            self._mod_func_map[node](node, outputs, output_masks, kwargs['channels'])
 
         # Finish rebuilding model
         output_nodes = [self.model.output_layers[i]._inbound_nodes[node_index]
@@ -278,10 +283,11 @@ class Surgeon:
         input_masks = utils.single_element(input_masks)
         self._replace_tensors[replaced_layer_output] = (new_output, input_masks)
 
-    def _delete_channels(self, node, inputs, input_masks, channels=None, layer_name=None):
+    def _delete_channels(self, node, inputs, input_masks, channels=None):
         """Delete selected channels of node.outbound_layer. Add it to the graph.
         """
         old_layer = node.outbound_layer
+        pdb.set_trace()
         # If this layer has already been operated on, use the cached copy of
         # the new layer. Otherwise, apply the inbound delete mask and
         # delete channels to obtain the new layer
@@ -292,9 +298,6 @@ class Surgeon:
             # This call is needed to initialise input_shape and output_shape
             temp_layer(utils.single_element(inputs))
             new_layer = self._delete_channel_weights(temp_layer, channels)
-            if layer_name:
-                new_layer.name = layer_name
-            self._new_layers_map[old_layer] = new_layer
         # Create a mask to propagate the deleted channels to downstream layers
         new_delete_mask = self._make_delete_mask(old_layer, channels)
         # Call the new layer on the rebuild submodel's inputs
