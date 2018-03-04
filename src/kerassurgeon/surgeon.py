@@ -214,15 +214,18 @@ class Surgeon:
                 logging.debug('bottomed out at replaced output: {0}'.format(
                     node_output))
                 output, output_mask = self._replace_tensors[node_output]
+                pdb.set_trace()
                 return output, output_mask
             # Next check if the current node has already been rebuilt.
             elif node in self._finished_nodes:
                 logging.debug('reached finished node: {0}'.format(node))
+                pdb.set_trace()
                 return self._finished_nodes[node]
             # Next check if one of the graph_inputs has been reached.
             elif node_output in graph_inputs:
                 logging.debug('bottomed out at a model input')
                 output_mask = graph_input_masks[graph_inputs.index(node_output)]
+                pdb.set_trace()
                 return node_output, output_mask
             # Otherwise recursively call this method on the inbound nodes.
             else:
@@ -231,7 +234,7 @@ class Surgeon:
                        [node.outbound_layer.name for node in inbound_nodes] ))
                 # Recursively rebuild the model up to `node`s inbound nodes to
                 # obtain its inputs and input masks
-                inputs, input_masks = izip(
+                inputs, input_masks = zip(
                     *[_rebuild_rec(n) for n in inbound_nodes])
 
                 # Apply masks to the node's layer's  weights and call the layer
@@ -242,11 +245,13 @@ class Surgeon:
                 # Record that this node has been rebuild
                 self._finished_nodes[node] = (output, output_mask)
                 logging.debug('layer complete: {0}'.format(layer.name))
+                pdb.set_trace()
                 return output, output_mask
 
         # Call the recursive _rebuild_rec method to rebuild the submodel up to
         # each output layer
-        outputs, output_masks = izip(*[_rebuild_rec(n) for n in output_nodes])
+        outputs, output_masks = zip(*[_rebuild_rec(n) for n in output_nodes])
+        pdb.set_trace()
         return outputs, output_masks
 
     def _delete_layer(self, node, inputs, input_masks):
