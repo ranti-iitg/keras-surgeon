@@ -203,30 +203,30 @@ class Surgeon:
             """
             # TODO: What happens if nodes have multiple output tensors?
             # Does that ever happen?
-            pdb.set_trace()
+            #pdb.set_trace()
             print(node,"rebuild node val")
             layer = node.outbound_layer
-            logging.debug('getting inputs for: {0}'.format(layer.name))
+            #logging.debug('getting inputs for: {0}'.format(layer.name))
             node_output = utils.single_element(node.output_tensors)
             # First check for conditions to bottom out the recursion
             # Check for replaced tensors before any other checks:
             # these are created by the surgery methods.
             if node_output in self._replace_tensors:
-                logging.debug('bottomed out at replaced output: {0}'.format(
-                    node_output))
+                '''logging.debug('bottomed out at replaced output: {0}'.format(
+                                                                    node_output))'''
                 output, output_mask = self._replace_tensors[node_output]
-                pdb.set_trace()
+                #pdb.set_trace()
                 return output, output_mask
             # Next check if the current node has already been rebuilt.
             elif node in self._finished_nodes:
-                logging.debug('reached finished node: {0}'.format(node))
-                pdb.set_trace()
+                #logging.debug('reached finished node: {0}'.format(node))
+                #pdb.set_trace()
                 return self._finished_nodes[node]
             # Next check if one of the graph_inputs has been reached.
             elif node_output in graph_inputs:
-                logging.debug('bottomed out at a model input')
+                #logging.debug('bottomed out at a model input')
                 output_mask = graph_input_masks[graph_inputs.index(node_output)]
-                pdb.set_trace()
+                #pdb.set_trace()
                 return node_output, output_mask
             # Otherwise recursively call this method on the inbound nodes.
             else:
@@ -243,14 +243,14 @@ class Surgeon:
 
                 # Record that this node has been rebuild
                 self._finished_nodes[node] = (output, output_mask)
-                logging.debug('layer complete: {0}'.format(layer.name))
-                pdb.set_trace()
+                #logging.debug('layer complete: {0}'.format(layer.name))
+                #pdb.set_trace()
                 return output, output_mask
 
         # Call the recursive _rebuild_rec method to rebuild the submodel up to
         # each output layer
         outputs, output_masks = zip(*[_rebuild_rec(n) for n in output_nodes])
-        pdb.set_trace()
+        #pdb.set_trace()
         return outputs, output_masks
 
     def _delete_layer(self, node, inputs, input_masks):
@@ -291,7 +291,7 @@ class Surgeon:
         """Delete selected channels of node.outbound_layer. Add it to the graph.
         """
         old_layer = node.outbound_layer
-        pdb.set_trace()
+        #pdb.set_trace()
         # If this layer has already been operated on, use the cached copy of
         # the new layer. Otherwise, apply the inbound delete mask and
         # delete channels to obtain the new layer
